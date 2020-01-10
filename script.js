@@ -1,60 +1,61 @@
-const numberOfNum = document.getElementById('numberOfNum')
-const numberOfRange = document.getElementById('numberOfRange')
-const uppercase = document.getElementById('uppercase')
-const numbers = document.getElementById('numbers')
-const symbol = document.getElementById('symbol')
-console.log(symbol.checked)
-const btnSub = document.querySelector('.btn')
-const form = document.querySelector('.form')
+
+const rangeValue = document.querySelector('#numberOfRange')
+const numValue = document.querySelector('#numberOfCurrent')
+const uppercase = document.querySelector('#uppercase')
+const numbers = document.querySelector('#numbers')
+const symbol = document.querySelector('#symbol')
 const passwordDisplay = document.querySelector('.password_display')
 
-numberOfNum.addEventListener('input', (e) => {chengeCurChar(e)})
-numberOfRange.addEventListener('input', (e) => {chengeCurChar(e)})
+rangeValue.addEventListener('input', (e) => {
+  const value = e.target.value
+  numValue.value = value
+})
+numValue.addEventListener('input', (e) => {
+  const value = e.target.value
+  rangeValue.value = value
+})
 
-function chengeCurChar(e) {
-  let value = e.target.value
-  numberOfNum.value = value
-  numberOfRange.value = value
-}
-
-const LOWER_CHAR_CODES = arrayFromLowToHigh(97, 122)
-const UPPERCASE_CHAR_CODES = arrayFromLowToHigh(65, 90)
-const NUMBER_CHAR_CODES = arrayFromLowToHigh(47, 57)
-const SYMBOL_CHAR_CODES = arrayFromLowToHigh(33, 47).concat(
-  arrayFromLowToHigh(58, 64)
+const btn = document.querySelector('.btn')
+const LOWER_CHAR_CODES = arrayNumbers(97, 122)
+const UPPERCASE_CHAR_CODES = arrayNumbers(65, 90)
+const NUMBER_CHAR_CODES = arrayNumbers(47, 57)
+const SYMBOL_CHAR_CODES = arrayNumbers(33, 47).concat(
+  arrayNumbers(58, 64)
 ).concat(
-  arrayFromLowToHigh(91, 96)
+  arrayNumbers(91, 96)
 ).concat(
-  arrayFromLowToHigh(123, 126)
+  arrayNumbers(123, 126)
 )
 
-btnSub.addEventListener('click', (e) => {
+btn.addEventListener('click', (e) => {
   e.preventDefault()
-  const characterAmount = numberOfNum.value
-  const upper = uppercase.checked
-  const num = numbers.checked
-  const symv = symbol.checked
-  const password = generatePassword(characterAmount, upper, num, symv)
+  let valueFoGeneration = numValue.value
+  let upper = uppercase.checked
+  let num = numbers.checked
+  let symb = symbol.checked
+  const password = passGenerate(valueFoGeneration, upper, num, symb)
   passwordDisplay.textContent = password
 })
 
-function generatePassword(characterAmount, upper, num, symv) {
-  let charCodes = LOWER_CHAR_CODES
-  if (upper) charCodes = charCodes.concat(UPPERCASE_CHAR_CODES)
-  if (num) charCodes = charCodes.concat(NUMBER_CHAR_CODES)
-  if (symv) charCodes = charCodes.concat(SYMBOL_CHAR_CODES)
+function passGenerate(a, b, c, d) {
 
-  const passwordCharacters = []
-  for (let i = 0; i < characterAmount; i++) {
-    const characterCode = charCodes[Math.floor(Math.random() * charCodes.length)]
-    passwordCharacters.push(String.fromCharCode(characterCode))
+  let arrayLetters = LOWER_CHAR_CODES
+  if (b) arrayLetters = arrayLetters.concat(UPPERCASE_CHAR_CODES)
+  if (c) arrayLetters = arrayLetters.concat(NUMBER_CHAR_CODES)
+  if (d) arrayLetters = arrayLetters.concat(SYMBOL_CHAR_CODES)
+
+
+  let generateArray = []
+  for (let i = 0; i < a; i++) {
+    let letter = arrayLetters[Math.floor(Math.random() * arrayLetters.length)]
+    generateArray.push(String.fromCharCode(letter))
   }
-  return passwordCharacters.join('')
+  return generateArray.join('')
 }
 
-function arrayFromLowToHigh(low, high) {
+function arrayNumbers(min, max) {
   let array = []
-  for (let i = low; i <= high; i++) {
+  for( let i = min; i < max; i++) {
     array.push(i)
   }
   return array
